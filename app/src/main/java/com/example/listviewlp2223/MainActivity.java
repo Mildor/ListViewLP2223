@@ -5,11 +5,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import com.example.listviewlp2223.Model.Task;
+import com.example.listviewlp2223.Tools.InterfaceMyListener;
 import com.example.listviewlp2223.Tools.MyAdapter;
 
 import java.util.ArrayList;
@@ -31,6 +33,19 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new MyAdapter(data);
         recyclerView.setAdapter(adapter);
+        adapter.setMyListener(new InterfaceMyListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                Task task = data.get(position);
+                new AlertDialog.Builder(v.getContext()).setTitle(task.getTitle()).setMessage(task.getDescription()).show();
+            }
+
+            @Override
+            public void onItemLongClick(int position, View view) {
+                data.remove(position);
+                adapter.notifyItemRemoved(position);
+            }
+        });
     }
 
     @SuppressLint("NotifyDataSetChanged")
